@@ -1,5 +1,6 @@
 <script setup>
 import { reactive } from "Vue";
+import Word from "./components/Word.vue";
 
 const gameState = reactive({
   word: "",
@@ -22,6 +23,9 @@ startGame();
 </script>
 
 <template>
+  
+  <Word :word="gameState.word" :guessedLetters="gameState.guessedLetters" />
+
   <button v-for="letter in gameState.gameLetters" :key="letter" @click="guessLetter(letter)">
     {{ letter }}
   </button>
