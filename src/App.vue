@@ -14,10 +14,11 @@ const gameState = reactive({
   ]
 })
 
-function guessLetter(letter) {
-  console.log(letter);
+async function startGame() {
+  gameState.word = await getRandomWord();
 }
 
+startGame();
 </script>
 
 <template>
