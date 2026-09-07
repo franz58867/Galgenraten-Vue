@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 import Word from "./components/Word.vue";
+import Image from "./components/Image.vue";
 
 const letterInput = ref("");
 
@@ -47,6 +48,14 @@ function submitGuess() {
   letterInput.value = "";
 }
 
+function getWrongLettersAsString() {
+  let wrongLetters = gameState.guessedLetters.filter(
+    letter => !gameState.word.includes(letter)
+  );
+
+  return wrongLetters.join(", ");
+}
+
 </script>
 
 <template>
@@ -61,6 +70,13 @@ function submitGuess() {
     Raten
   </button>
 
+  <p id="guessedLetters">Bereits falsch geratene Buchstaben: {{ getWrongLettersAsString() }}</p>
+
+  <p id="mistakesCount">Fehlerpunkte: {{ gameState.mistakes }} </p>
+
+  <Image :mistakes="gameState.mistakes" />
+
+  <br><br>
   <button v-for="letter in gameState.gameLetters" :key="letter" @click="guessLetter(letter)">
     {{ letter }}
   </button>
