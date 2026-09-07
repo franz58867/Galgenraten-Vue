@@ -1,6 +1,8 @@
 <script setup>
-import { reactive } from "Vue";
+import { reactive, ref } from "vue";
 import Word from "./components/Word.vue";
+
+const letterInput = ref("");
 
 const gameState = reactive({
   word: "",
@@ -20,11 +22,44 @@ async function startGame() {
 }
 
 startGame();
+
+function guessLetter(guessedLetter) {
+  if (guessedLetter === "") {
+    return;
+  }
+
+  if (!gameState.gameLetters.includes(guessedLetter)) {
+    alert("Bitte einen Buchstaben eingeben");
+    return;
+  }
+
+  if (!gameState.guessedLetters.includes(guessedLetter)) {
+    gameState.guessedLetters.push(guessedLetter);
+
+    if (!gameState.word.includes(guessedLetter)) {
+      gameState.mistakes++;
+    }
+  }
+}
+
+function submitGuess() {
+  guessLetter(letterInput.value.toLowerCase());
+  letterInput.value = "";
+}
+
 </script>
 
 <template>
-  
+
   <Word :word="gameState.word" :guessedLetters="gameState.guessedLetters" />
+
+  <input v-model="letterInput" maxlength="1" @keydown.enter="submitGuess">
+
+  <br>
+
+  <button @click="submitGuess">
+    Raten
+  </button>
 
   <button v-for="letter in gameState.gameLetters" :key="letter" @click="guessLetter(letter)">
     {{ letter }}
